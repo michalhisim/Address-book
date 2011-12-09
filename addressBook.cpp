@@ -15,6 +15,7 @@
 
 using namespace std;
 
+//! Helper class
 class Project
 {
 
@@ -23,6 +24,7 @@ public:
 	string author;
 	string version;
 
+	//! Constructor
 	Project()
 	{
 		this->name = "Address Book";
@@ -31,9 +33,7 @@ public:
 	}
 };
 
-/*
-
-*/
+//! Contact class
 class Contact
 {
 public:
@@ -42,6 +42,7 @@ public:
 	string name;
 	string surname;
 
+	//! constructor - create an anonymouse person
 	Contact()
 	{
 		this->name    = "Anonymous";
@@ -49,6 +50,11 @@ public:
 		this->phone   = 123456789;
 	}
 
+	//! converts string to integer
+	/*!
+	@param phone
+	@return success/error
+	*/
 	bool addPhone(string phone)
 	{
 		istringstream is(phone);
@@ -63,6 +69,7 @@ public:
 		return true;
 	}
 
+	//! clean the contact
 	void destroy()
 	{
 		Contact::~Contact();
@@ -70,6 +77,7 @@ public:
 
 };
 
+//! Group of contacts
 class AddressBook
 {
 	// config
@@ -78,7 +86,7 @@ class AddressBook
 public:
 	vector<Contact> book;
 
-	// constructor
+	//! constructor
 	AddressBook()
 	{
 		//Config
@@ -86,6 +94,11 @@ public:
 		this->rowWidth = 20;
 	}
 
+	//! Add a new contacts
+	/*!
+	@param person - a new contact
+	@return id of added contact
+	*/
 	int addContact(Contact person)
 	{
 		this->book.push_back(person);
@@ -93,6 +106,11 @@ public:
 		return this->book.size()-1;
 	}
 
+	//! Getter of contact
+	/*!
+	@param id - index of contact
+	@return Contact
+	*/
 	Contact getContact(int id)
 	{
 		if(id>=0 && id<this->book.size())
@@ -107,6 +125,11 @@ public:
 		}
 	}
 
+	//! Delete the contact from address book
+	/*!
+	@param id - index of contact
+	@return - success/error
+	*/
 	bool deleteContact(int id)
 	{
 		if(id>=0 && id<this->book.size())
@@ -121,6 +144,7 @@ public:
 		}
 	}
 
+	//! Print all contacts
 	void print()
 	{
 		int size = this->book.size();
@@ -156,6 +180,11 @@ public:
 
 	}
 
+	//! Import contacts from CSV file
+	/*!
+	@param path - file name and path
+	@return - success/error
+	*/
 	bool importFromCsv(string path)
 	{
 		ifstream file;
@@ -238,6 +267,11 @@ public:
 		}
 	}
 
+	//! Export contacts to CSV
+	/*!
+	@param path - file name and path
+	@return - success/error
+	*/
 	bool export2Csv(string path)
 	{
 		ofstream file;
@@ -263,6 +297,12 @@ public:
 		}
 	}
 
+
+	//! Export contacts to HTML
+	/*!
+	@param path - file name and path
+	@return - success/error
+	*/
 	bool export2Html(string path)
 	{
 		
@@ -279,12 +319,20 @@ public:
 		output.append("<title>");
 		output.append(title);
 		output.append("</title>\n");
+		output.append("<style>\n");
+		output.append("body{font:13px/1.231 sans-serif; *font-size:small;text-align:center}\n");
+		output.append("#page{text-align:left;width:950px;margin:auto}\n");
+		output.append("h1{text-align:center}\n");
+		output.append("table{width:100%;border: 1px solid #c44206;background:#c44206;} th{color:#fff} td{background: #FBFBFB}\n");
+		output.append("tr:nth-child(even) td{background: #CDCDCD}\n");
+		output.append("#footer{margin:18px}</style>\n");
 		output.append("</head>\n");
 		output.append("<body>\n");
+		output.append("<div id=\"page\">\n");
 		output.append("<h1>");
 		output.append(title);
 		output.append("</h1>");
-		output.append("<table>\n");
+		output.append("<table cellspacing=\"1\" cellpadding=\"5\">\n");
 		output.append("<tr><th>Name</th><th>Surname</th><th>Phone</th></tr>\n");
 
 		int size = this->book.size();
@@ -304,7 +352,9 @@ public:
 		}
 
 		// Footer
-		output.append("</table></body></html>");
+		output.append("</table></div>\n");
+		output.append("<div id=\"footer\">Copyright 2011 <a href=\"http://hisim.cz\" target=\"blank\"><img src=\"http://hisim.cz/images/hisim_logo_copyright.png\" border=\"0\" alt=\"HISIM Studio\" /></a>. All rights reserved.</div>\n");
+		output.append("</body></html>");
 
 		ofstream file;
 
@@ -324,6 +374,7 @@ public:
 	}
 };
 
+//! Menu class
 class Menu
 {
 	vector<string> menu;
@@ -340,6 +391,10 @@ public:
 	bool running;
 	int menuItems;
 
+	//! constructor
+	/*!
+	@param project - info about the application
+	*/
 	Menu(Project project)
 	{
 		this->project = project;
@@ -351,6 +406,11 @@ public:
 		this->width = 30;
 	}
 
+	//! Add a menu item to the menu list
+	/*!
+	@param item - name of new menu item
+	@return bool - success/error
+	*/
 	bool addItem(string item)
 	{
 		this->menu.push_back(item);
@@ -360,11 +420,21 @@ public:
 		return true;
 	}
 
+	//! Add a menu title
+	/*!
+	@param title - name of menu
+	@return bool - success/error
+	*/
 	bool addTitle(string title)
 	{
 		this->title = title;
 	}
 
+	//! Filters the key presses
+	/*!
+	@param key - code of key
+	@return bool - moove or not
+	*/
 	bool extendedKeyPress(int key)
 	{
 		bool move = false;
@@ -391,7 +461,7 @@ public:
 		return move;
 	}
 
-
+	//! print the menu on the screen
 	void drawMenu()
 	{
 		int item;
@@ -437,19 +507,19 @@ int _tmain(int argc, _TCHAR* argv[])
 	
 	AddressBook book;
 
-	project.version = "0.4 (Beta)";
+	project.version = "0.5";
 
 	Menu menu(project);
 
-	menu.addItem("1) Add contact");
-	menu.addItem("2) Edit contact");
-	menu.addItem("3) Delete contact");
-	menu.addItem("4) View all contacts");
-	menu.addItem("5) Delete all contacts");
-	menu.addItem("6) Save all contacts to file");
-	menu.addItem("7) Read contacts from file");
-	menu.addItem("8) Export all contacts to HTML");
-	menu.addItem("9) Exit");
+	menu.addItem("Add contact");
+	menu.addItem("Edit contact");
+	menu.addItem("Delete contact");
+	menu.addItem("View all contacts");
+	menu.addItem("Delete all contacts");
+	menu.addItem("Save all contacts to file");
+	menu.addItem("Read contacts from file");
+	menu.addItem("Export all contacts to HTML");
+	menu.addItem("Exit");
 
 	int key;
 	bool refreshMenu = true;
