@@ -239,6 +239,8 @@ public:
 				}
 				else if(value=="\n")
 				{
+					person.addPhone(parameter_val);
+					
 					this->addContact(person);
 
 					// Recreate person
@@ -779,7 +781,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 					cout << endl;
 
-					if(book.importFromCsv("pokus.csv"))
+					if(book.importFromCsv(filename))
 					{
 						cout << " Success!" << endl;
 					}
